@@ -28,6 +28,9 @@ app.get('/employee', (req, res) => {
 app.get('/product', (req, res) => {
     res.render('product')
 })
+app.get('/supplier', (req, res) => {
+    res.render('supplier')
+})
 app.get('/', (req, res) => {
     res.render('home')
 })
@@ -52,10 +55,10 @@ app.post('/warehouse/insertemploye', (req, res) => {
 app.post('/warehouse/insertproduct', (req, res) => {
 
     const product = req.body.product
-    const code = req.body.code
     const datetime = new Date().toISOString().slice(0, 19).replace('T', ' '); //'YYYY-MM-DD HH:MM:SS'
 
-    const sql = `INSERT INTO product (NAME, CODE, CREATION_DATE) VALUES ('${product}', '${code}', '${datetime}')`
+
+    const sql = `INSERT INTO product (NAME, CREATION_DATE) VALUES ('${product}', '${datetime}')`
 
     conection.query(sql, function(err){
         if(err) {
@@ -63,6 +66,24 @@ app.post('/warehouse/insertproduct', (req, res) => {
         }
 
         res.redirect('/product')
+    })
+})
+
+app.post('/warehouse/insertsupplier', (req, res) => {
+
+    const supplier = req.body.supplier
+    const cnpj = req.body.cnpj
+    const contract_date = req.body.contract_date
+
+
+    const sql = `INSERT INTO supplier (NAME, CNPJ, CONTRACT_START_DATE) VALUES ('${supplier}', '${cnpj}', '${contract_date}')`
+
+    conection.query(sql, function(err){
+        if(err) {
+            console.log(err)
+        }
+
+        res.redirect('/supplier')
     })
 })
 
