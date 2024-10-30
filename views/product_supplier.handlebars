@@ -1,0 +1,36 @@
+<h1>Product - Supplier</h1>
+
+<form action="/product_supplier" method="GET">
+    <input type="text" name="productName" placeholder="Product Name">
+    <input type="submit" value="Procurar">
+</form>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>SUPPLIER</th>
+            <th>Edit</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each product_supplier}}
+            {{#if this.product}}
+                <tr>
+                    <td>#{{this.ID}}</td>
+                    <td>{{this.NAME}}</td>
+                    <td>
+                        {{#if this.NAME_SUPPLIER}}
+                            {{this.NAME_SUPPLIER}}
+                        {{else}}
+                            *
+                        {{/if}}
+                    </td>
+                    <td><a href="/product_supplier/edit/{{this.ID}}">Edit</a></td>
+                </tr>
+            {{/if}}
+        {{/each}}
+    </tbody>
+</table>
+
