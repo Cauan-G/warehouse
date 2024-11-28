@@ -139,9 +139,82 @@ router.get('/product_supplier/edit/:id', authMiddleware, (req, res) => {
 });
 
 
+router.get('/movement', (req, res) => {
+    const name = req.query.name;
+    let sqlProductSupplier = ``;
+
+    if (name) {
+        sqlProductSupplier = `
+        SELECT 
+            M.LOCATION,
+            M.QUANTITY,
+            M.MOVEMENT_TYPE,
+            M.MOVEMENT_DATE,
+            S.NAME AS SUPPLIER_NAME,
+            P.NAME AS PRODUCT_NAME,
+            E.NAME AS EMPLOYEE_NAME
+        FROM MOVEMENT m
+        LEFT JOIN PRODUCT_SUPPLIER ps ON m.PRODUCT_SUPPLIER_ID = ps.PRODUCT_SUPPLIER_ID
+        LEFT JOIN SUPPLIER s ON ps.SUPPLIER_ID = s.SUPPLIER_ID
+        LEFT JOIN PRODUCT p ON ps.PRODUCT_ID = p.PRODUCT_ID
+        LEFT JOIN EMPLOYEE e ON m.EMPLOYEE_ID = e.EMPLOYEE_ID
+        WHERE M.LOCATION LIKE ? 
+           OR M.MOVEMENT_TYPE LIKE ? 
+           OR M.MOVEMENT_DATE LIKE ? 
+           OR S.NAME LIKE ? 
+           OR P.NAME LIKE ? 
+           OR E.NAME LIKE ?
+        ;`;
+
+    
+        const searchParams = Array(6).fill(`%${name}%`);
+
+        connection.query(sqlProductSupplier, searchParams, function (err, data) {
+            if (err) {
+                console.log(err);
+                res.status(500).send("Error retrieving product-supplier.");
+                return;
+            }
+            res.render('movement', { product_supplier: data });
+        });
+    } else {
+        sqlProductSupplier = `
+        SELECT 
+            M.LOCATION,
+            M.QUANTITY,
+            M.MOVEMENT_TYPE,
+            M.MOVEMENT_DATE,
+            S.NAME AS SUPPLIER_NAME,
+            P.NAME AS PRODUCT_NAME,
+            E.NAME AS EMPLOYEE_NAME
+        FROM MOVEMENT m
+        LEFT JOIN PRODUCT_SUPPLIER ps ON m.PRODUCT_SUPPLIER_ID = ps.PRODUCT_SUPPLIER_ID
+        LEFT JOIN SUPPLIER s ON ps.SUPPLIER_ID = s.SUPPLIER_ID
+        LEFT JOIN PRODUCT p ON ps.PRODUCT_ID = p.PRODUCT_ID
+        LEFT JOIN EMPLOYEE e ON m.EMPLOYEE_ID = e.EMPLOYEE_ID
+        ;`;
+
+        connection.query(sqlProductSupplier, function (err, productSupplierData) {
+            if (err) {
+                console.log(err);
+                res.status(500).send("Error retrieving data for editing.");
+                return;
+            }
+            res.render('movement', { product_supplier: productSupplierData });
+        });
+    }
+});
+
+router.get('/movement/insert', (req, res) => {
+    res.render('movement_insert');
+});
+
+
+
 router.get('/register', (req, res) => {
     res.render('register');
 });
+
 router.get('/login', (req, res) => {
     res.render('login');
 });
@@ -253,6 +326,98 @@ router.post('/product_supplier/update', (req, res) => {
         }
         
         res.redirect('/product_supplier');
+    });
+});
+
+
+router.post('/insert_movement', (req, res) => {
+    const { product_supplier_id, employee_id, location, quantity, unit_cost, movement_type, movement_date } = req.body;
+
+    connection.beginTransaction((err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Erro ao iniciar transação.');
+        }
+
+        const insertMovementQuery = `
+            INSERT INTO MOVEMENT (PRODUCT_SUPPLIER_ID, EMPLOYEE_ID, LOCATION, QUANTITY, UNIT_COST, MOVEMENT_TYPE, MOVEMENT_DATE)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        `;
+
+        connection.query(
+            insertMovementQuery,
+            [product_supplier_id, employee_id, location, quantity, unit_cost, movement_type, movement_date],
+            (err, result) => {
+                if (err) {
+                    console.error(err);
+                    return connection.rollback(() => {
+                        res.status(500).send('Erro ao inserir movimento.');
+                    });
+                }
+
+                const updateQuantityQuery = `
+                    UPDATE PRODUCT_SUPPLIER
+                    SET QUANTITY = QUANTITY ${movement_type === 'ENTRY' ? '+' : '-'} ?
+                    WHERE PRODUCT_SUPPLIER_ID = ?
+                `;
+
+                connection.query(
+                    updateQuantityQuery,
+                    [quantity, product_supplier_id],
+                    (err, updateResult) => {
+                        if (err) {
+                            console.error(err);
+                            return connection.rollback(() => {
+                                res.status(500).send('Erro ao atualizar quantidade.');
+                            });
+                        }
+
+                        if (movement_type === 'EXIT') {
+                            const checkQuantityQuery = `
+                                SELECT QUANTITY FROM PRODUCT_SUPPLIER WHERE PRODUCT_SUPPLIER_ID = ?
+                            `;
+
+                            connection.query(checkQuantityQuery, [product_supplier_id], (err, checkResult) => {
+                                if (err) {
+                                    console.error(err);
+                                    return connection.rollback(() => {
+                                        res.status(500).send('Erro ao verificar estoque.');
+                                    });
+                                }
+
+                                if (checkResult[0].QUANTITY < 0) {
+                                    return connection.rollback(() => {
+                                        res.status(400).send('Quantidade insuficiente para saída.');
+                                    });
+                                }
+
+                                connection.commit((err) => {
+                                    if (err) {
+                                        console.error(err);
+                                        return connection.rollback(() => {
+                                            res.status(500).send('Erro ao confirmar transação.');
+                                        });
+                                    }
+
+                                    res.status(201).send('Movimento adicionado e estoque atualizado.');
+                                });
+                            });
+                        } else {
+                            connection.commit((err) => {
+                                if (err) {
+                                    console.error(err);
+                                    return connection.rollback(() => {
+                                        res.status(500).send('Erro ao confirmar transação.');
+                                    });
+                                }
+
+                                res.status(201).send('Movimento adicionado e estoque atualizado.');
+                            });
+                        }
+                    }
+                );
+            }
+        );
     });
 });
 

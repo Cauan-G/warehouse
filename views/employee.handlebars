@@ -1,16 +1,29 @@
-<h1>Employe</h1>
-<form action="/warehouse/insertemploye" method="post" class="form">
-    <div class="form-control">
-        <label for="name">Name</label>
-        <input type="text" name="name" placeholder="Name">
+<h1 class="text-center my-4">Employee</h1>
+
+<form action="/warehouse/insertemploye" method="post" class="needs-validation" novalidate>
+    <!-- Name -->
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" id="name" name="name" class="form-control" placeholder="Name" required>
+        <div class="invalid-feedback">Please enter the employee's name.</div>
     </div>
-    <div class="form-control">
-        <label for="cpf">CPF</label>
-        <input type="text" name="cpf" placeholder="CPF">
+
+    <!-- CPF -->
+    <div class="mb-3">
+        <label for="cpf" class="form-label">CPF</label>
+        <input type="text" id="cpf" name="cpf" class="form-control" placeholder="CPF" required>
+        <div class="invalid-feedback">Please enter a valid CPF.</div>
     </div>
-    <div class="form-control">
-        <label for="hire_date">Hire Date</label>
-        <input type="date" name="hire_date" placeholder="Hire Date">
+
+    <!-- Hire Date -->
+    <div class="mb-3">
+        <label for="hire_date" class="form-label">Hire Date</label>
+        <input type="date" id="hire_date" name="hire_date" class="form-control" required>
+        <div class="invalid-feedback">Please select the hire date.</div>
     </div>
-    <input type="submit" value="Submit">
+
+    <!-- Submit Button -->
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
 </form>

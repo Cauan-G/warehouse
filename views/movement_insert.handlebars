@@ -1,0 +1,56 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header text-center">
+                    <h3>Adicionar Movimento</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/insert_movement" method="POST">
+                        <div class="mb-3">
+                            <label for="product_supplier_id" class="form-label">ID do Produto-Fornecedor:</label>
+                            <input type="number" class="form-control" id="product_supplier_id" name="product_supplier_id" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="employee_id" class="form-label">ID do Funcionário:</label>
+                            <input type="number" class="form-control" id="employee_id" name="employee_id" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Localização:</label>
+                            <input type="number" class="form-control" id="location" name="location" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label">Quantidade:</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="unit_cost" class="form-label">Custo Unitário:</label>
+                            <input type="number" class="form-control" id="unit_cost" step="0.01" name="unit_cost" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="movement_type" class="form-label">Tipo de Movimento:</label>
+                            <select id="movement_type" name="movement_type" class="form-select" required>
+                                <option value="ENTRY">Entrada</option>
+                                <option value="EXIT">Saída</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="movement_date" class="form-label">Data do Movimento:</label>
+                            <input type="datetime-local" class="form-control" id="movement_date" name="movement_date" required>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Adicionar Movimento</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

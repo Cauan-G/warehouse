@@ -1,36 +1,51 @@
-<h1>Product - Supplier</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Product - Supplier</h1>
 
-<form action="/product_supplier" method="GET">
-    <input type="text" name="productName" placeholder="Product Name">
-    <input type="submit" value="Procurar">
-</form>
+    
+    <form action="/product_supplier" method="GET" class="d-flex mb-4">
+        <input 
+            type="text" 
+            name="productName" 
+            class="form-control me-2" 
+            placeholder="Product Name">
+        <button type="submit" class="btn btn-primary">Procurar</button>
+    </form>
 
-<table border="1">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>NAME</th>
-            <th>SUPPLIER</th>
-            <th>Edit</th>
-        </tr>
-    </thead>
-    <tbody>
-        {{#each product_supplier}}
-            {{#if this.product}}
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
                 <tr>
-                    <td>#{{this.ID}}</td>
-                    <td>{{this.NAME}}</td>
-                    <td>
-                        {{#if this.NAME_SUPPLIER}}
-                            {{this.NAME_SUPPLIER}}
-                        {{else}}
-                            *
-                        {{/if}}
-                    </td>
-                    <td><a href="/product_supplier/edit/{{this.ID}}">Edit</a></td>
+                    <th>ID</th>
+                    <th>NAME</th>
+                    <th>SUPPLIER</th>
+                    <th>Edit</th>
                 </tr>
-            {{/if}}
-        {{/each}}
-    </tbody>
-</table>
-
+            </thead>
+            <tbody>
+                {{#each product_supplier}}
+                    {{#if this.product}}
+                        <tr>
+                            <td>#{{this.ID}}</td>
+                            <td>{{this.NAME}}</td>
+                            <td>
+                                {{#if this.NAME_SUPPLIER}}
+                                    {{this.NAME_SUPPLIER}}
+                                {{else}}
+                                    <span class="text-danger">Not Assigned</span>
+                                {{/if}}
+                            </td>
+                            <td>
+                                <a 
+                                    href="/product_supplier/edit/{{this.ID}}" 
+                                    class="btn btn-sm btn-warning">
+                                    Edit
+                                </a>
+                            </td>
+                        </tr>
+                    {{/if}}
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>

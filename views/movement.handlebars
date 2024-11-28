@@ -1,0 +1,41 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <h1 class="text-center mb-4">Product - Supplier</h1>
+            
+            <form action="/movement" method="GET" class="d-flex mb-4">
+                <input type="text" class="form-control me-2" name="name" placeholder="Search Name">
+                <button type="submit" class="btn btn-primary">Procurar</button>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>LOCATION</th>
+                            <th>QUANTITY</th>
+                            <th>MOVEMENT TYPE</th>
+                            <th>MOVEMENT DATE</th>
+                            <th>SUPPLIER NAME</th>
+                            <th>PRODUCT NAME</th>
+                            <th>EMPLOYEE NAME</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each product_supplier}}
+                            <tr>
+                                <td>{{this.LOCATION}}</td>
+                                <td>{{this.QUANTITY}}</td>
+                                <td>{{this.MOVEMENT_TYPE}}</td>
+                                <td>{{this.MOVEMENT_DATE}}</td>
+                                <td>{{this.SUPPLIER_NAME}}</td>
+                                <td>{{this.PRODUCT_NAME}}</td>
+                                <td>{{this.EMPLOYEE_NAME}}</td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,16 +1,41 @@
-<h1>Supplier</h1>
-<form action="/warehouse/insertsupplier" method="post" class="form">
-    <div class="form-control">
-        <label for="supplier">Supplier</label>
-        <input type="text" name="supplier" placeholder="Supplier">
-    </div>
-    <div class="form-control">
-        <label for="cnpj">Cnpj</label>
-        <input type="text" name="cnpj" placeholder="Cnpj">
-    </div>
-    <div class="form-control">
-        <label for="contract_date">Contract Date</label>
-        <input type="date" name="contract_date" placeholder="Contract Date">
-    </div>
-    <input type="submit" value="Submit">
-</form>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Add Supplier</h1>
+
+    <form action="/warehouse/insertsupplier" method="post" class="p-4 border rounded shadow-sm bg-light">
+        <div class="mb-3">
+            <label for="supplier" class="form-label">Supplier</label>
+            <input 
+                type="text" 
+                name="supplier" 
+                id="supplier" 
+                class="form-control" 
+                placeholder="Enter supplier name" 
+                required>
+        </div>
+
+        <div class="mb-3">
+            <label for="cnpj" class="form-label">CNPJ</label>
+            <input 
+                type="text" 
+                name="cnpj" 
+                id="cnpj" 
+                class="form-control" 
+                placeholder="Enter CNPJ" 
+                required>
+        </div>
+
+        <div class="mb-3">
+            <label for="contract_date" class="form-label">Contract Date</label>
+            <input 
+                type="date" 
+                name="contract_date" 
+                id="contract_date" 
+                class="form-control" 
+                required>
+        </div>
+
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>

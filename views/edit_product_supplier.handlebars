@@ -1,26 +1,47 @@
-<h1>Edit Product-Supplier Relationship</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Edit Product-Supplier Relationship</h1>
+    <div class="card shadow">
+        <div class="card-body">
+            <form action="/product_supplier/update" method="POST">
+                <input type="hidden" name="productID" value="{{product_supplier.ID}}">
+                
+                <!-- Product Name -->
+                <div class="mb-3">
+                    <label for="productName" class="form-label">Product:</label>
+                    <input type="text" id="productName" class="form-control" value="{{product_supplier.NAME}}" readonly>
+                </div>
+                
+                <!-- Supplier Dropdown -->
+                <div class="mb-3">
+                    <label for="supplier" class="form-label">Supplier:</label>
+                    <select id="supplier" name="supplierID" class="form-select" required>
+                        {{#each suppliers}}
+                            <option value="{{this.SUPPLIER_ID}}" 
+                            {{#if (eq this.SUPPLIER_ID ../product_supplier.SUPPLIER_ID)}}selected{{/if}}>
+                                {{this.NAME}}
+                            </option>
+                        {{/each}}
+                    </select>
+                </div>
 
-<form action="/product_supplier/update" method="POST">
-    <input type="hidden" name="productID" value="{{product_supplier.ID}}">
-    
-    <label for="productName">Product:</label>
-    <input type="text" id="productName" value="{{product_supplier.NAME}}" readonly><br><br>
+                <!-- Quantity -->
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" class="form-control" value="{{product_supplier.QUANTITY}}" required>
+                </div>
 
-    <label for="supplier">Supplier:</label>
-    <select id="supplier" name="supplierID" required>
-        {{#each suppliers}}
-            <option value="{{this.SUPPLIER_ID}}" 
-            {{#if (eq this.SUPPLIER_ID ../product_supplier.SUPPLIER_ID)}}selected{{/if}}>
-                {{this.NAME}}
-            </option>
-        {{/each}}
-    </select><br><br>
+                <!-- Cost -->
+                <div class="mb-3">
+                    <label for="cost" class="form-label">Cost:</label>
+                    <input type="text" id="cost" name="cost" class="form-control" value="{{product_supplier.COST}}" required>
+                </div>
 
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" name="quantity" value="{{product_supplier.QUANTITY}}" required><br><br>
+                <!-- Save Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-    <label for="cost">Cost:</label>
-    <input type="text" id="cost" name="cost" value="{{product_supplier.COST}}" required><br><br>
-
-    <input type="submit" value="Save">
-</form>

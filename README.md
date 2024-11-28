@@ -1,2 +1,2 @@
 # warehouse
-Developed a back-end system for a warehouse using Node.js, with a database to store and manage all inventory items.
+Developed a system for a warehouse using Node.js, Express and handlebars, with a database to store and manage all inventory items.

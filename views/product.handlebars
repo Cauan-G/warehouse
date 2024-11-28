@@ -1,8 +1,21 @@
-<h1>Product</h1>
-<form action="/warehouse/insertproduct" method="post" class="form">
-    <div class="form-control">
-        <label for="product">Product</label>
-        <input type="text" name="product" placeholder="Product">
-    </div>
-    <input type="submit" value="Submit">
-</form>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Product</h1>
+
+    <form action="/warehouse/insertproduct" method="post" class="p-4 border rounded shadow-sm bg-light">
+        {{!-- I'm considering here the to insert a quantity is necessary a make a movimentation --}}
+        <div class="mb-3">
+            <label for="product" class="form-label">Product</label>
+            <input 
+                type="text" 
+                name="product" 
+                id="product" 
+                class="form-control" 
+                placeholder="Enter product name" 
+                required>
+        </div>
+
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</div>
